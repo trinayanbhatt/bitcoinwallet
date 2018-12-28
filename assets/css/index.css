@@ -1,0 +1,67 @@
+.loginContainer {
+    width: 600px;
+    background: white;
+    padding: 30px;
+    margin: 0 auto;
+    margin-top: 50px;
+    box-shadow: 0 3px 4px rgba(24,59,101,.37);
+    text-align: center;
+    margin-bottom: 4%;
+}
+html, body{
+    font-family: 'Lato', sans-serif !important;
+
+}
+.sendform {
+    width: 45%;
+}
+th, td {
+    padding: 19px 5px 19px !important;
+    border: 0;
+    border-bottom: 1px solid #d1d7dc;
+    font-weight: 400;
+    font-size: 1.4em;
+    text-align: left;
+    font-size: 1em;
+}
+
+label {
+    display: block;
+    position: relative;
+    left: 0;
+    top: 0;
+    z-index: 2;
+    font-weight: 400;
+}
+
+
+
+.buttons{
+    float: none !important;
+    margin: 10px auto;
+    overflow: hidden;
+    float: left;
+    min-width: 80px;
+    padding: 7.5px 27px;
+    box-shadow: 0 2px 4px rgba(11,31,79,.5);
+    border-radius: 4px;
+    border: 0;
+    background: #22283a;
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+    text-transform: uppercase;
+}
+.inputboxes{
+    display: block;
+    width: 79%;
+    border-radius: 4px;
+    border: 1px solid #a4aaba;
+    background: #fff;
+    color: #a4aaba;
+    font-size: 12px;
+    margin: 0 auto;
+    margin-top: 20px;
+    text-align: center;
+    margin-bottom: 24px;
+}
