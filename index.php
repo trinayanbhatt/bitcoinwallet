@@ -36,7 +36,7 @@
 <div class="loginContainer">
                     <div class="row positionCont">
                         
-                        <p class="font14">If you a're a new user, please click on the create BBIT wallet button.</p>
+                        <p class="font14">If you are a new user, please click on the create BBIT wallet button.</p>
                         <div class="col-md-6">
                              <button type="submit" class="createwalletBtn margintop30 btnmobilemarg testnetColor buttons" id="create" data-toggle="modal" data-target="#myModal1">CREATE BBIT WALLET</button>
                            
@@ -45,7 +45,23 @@
                        <div class="col-md-6">
                             <button type="submit" class="createwalletBtn margintop30 btnmobilemarg testnetColor buttons" id="restore" data-toggle="modal" data-target="#myModal2">RESTORE BBIT WALLET</button>
                        </div>
-                        
+
+                       <div>
+
+                         <p>
+                                <label for="sendRecipientaddress">Enter Password</label>
+                                <input type="text" id="pass1" name="sendRecipientaddress" placeholder="Recipient Address" onchange="">
+                                <span class="suffix"><i class="icon-qr"></i></span>
+                         </p>
+
+                         <p>
+                                <label for="sendRecipientaddress">Enter seed </label>
+                                <input type="text" id="seed" name="sendRecipientaddress" placeholder="Recipient Address" onchange="">
+                                <span class="suffix"><i class="icon-qr"></i></span>
+                            </p>
+
+
+                        </div>
                     </div>
 
                     <div class="row margintop30 mobilemarg">

@@ -45,6 +45,7 @@ $('document').ready(function(){
     BitcoreAddressGenerator();
     sendTransaction();
     checkValidity();
+    restore();
 
   
     //$('#modal1').modal();
@@ -102,6 +103,33 @@ function createmultisig(publicKey){
                       
         }
     });   
+    
+}
+
+function returnaddress(publicKey){
+    
+    var address;
+    $.ajax({
+        type: "POST",
+        url: 'assets/api/createmultisig.php',
+        async:false,
+        data: ({
+           publicKey:publicKey
+        }),
+        success: function(Response) {
+            publicAddress = Response;
+            publicAddress = JSON.parse(publicAddress);
+            multisigaddress = publicAddress.result;
+
+            address = multisigaddress;
+                      
+        }
+        
+    });  
+
+    return address; 
+
+    
     
 }
 
@@ -266,7 +294,7 @@ function sendFinaltransaction(finalhex){
 
 function redirectToHome(){
     if(isvalid == true){
-        window.location.href = "/zerowallet/home.php";
+        window.location.href = "/bitcoinwallet/home.php";
     }
     else{
         alert("invalid address ");
@@ -279,7 +307,7 @@ function redirectToHome(){
 function BitcoreAddressGenerator(){
 
      $('#createnew').click(function(){
-            generateBip39XRKWallet(password, wordListLang, entropyLength,
+            generateBip39Wallet(password, wordListLang, entropyLength,
             address_pubkeyhash_version, address_checksum_value,
             private_key_version);
             
@@ -288,7 +316,7 @@ function BitcoreAddressGenerator(){
 
 
 
-function generateBip39XRKWallet(password, wordListLang, entropyLength,
+function generateBip39Wallet(password, wordListLang, entropyLength,
     address_pubkeyhash_version, address_checksum_value,
     private_key_version) {
 
@@ -300,8 +328,8 @@ function generateBip39XRKWallet(password, wordListLang, entropyLength,
     var xprivKey = code.toHDPrivateKey(password); // using a passphrase
     var masterPrivateKey = xprivKey.privateKey.toString();
 
-    PublicAddress = createXRKAddressFromPrivateKey(masterPrivateKey, address_pubkeyhash_version, address_checksum_value);
-    PrivateKey = createXRKPrivateKeyFromPrivateKey(masterPrivateKey, private_key_version, address_checksum_value);
+    PublicAddress = createAddressFromPrivateKey(masterPrivateKey, address_pubkeyhash_version, address_checksum_value);
+    PrivateKey = createPrivateKeyFromPrivateKey(masterPrivateKey, private_key_version, address_checksum_value);
 
 
     var multiWallet = {
@@ -332,7 +360,7 @@ function generateBip39XRKWallet(password, wordListLang, entropyLength,
 
 
 // this functions creates Public Address from master private key
-function createXRKAddressFromPrivateKey(masterPrivateKey, address_pubkeyhash_version, address_checksum_value) {
+function createAddressFromPrivateKey(masterPrivateKey, address_pubkeyhash_version, address_checksum_value) {
 
     // step 1: Get raw private key
     var privateKeyHex = new bitcore.PrivateKey(masterPrivateKey);
@@ -392,7 +420,7 @@ function createXRKAddressFromPrivateKey(masterPrivateKey, address_pubkeyhash_ver
 
 
 // this functions creates Private Key from master private key
-function createXRKPrivateKeyFromPrivateKey(masterPrivateKey, private_key_version, address_checksum_value) {
+function createPrivateKeyFromPrivateKey(masterPrivateKey, private_key_version, address_checksum_value) {
 
     // step 1: Get raw private key
     var privateKeyHex = new bitcore.PrivateKey(masterPrivateKey);
@@ -466,11 +494,7 @@ function checkPassword(password, address_pubkeyhash_version, address_checksum_va
 
     password = $('#pass1').val();
 
-    console.log(password);
-
     seed = localStorage.getItem("seed");
-
-    console.log(seed);
 
     var code = new Mnemonic(seed);
 
@@ -478,9 +502,9 @@ function checkPassword(password, address_pubkeyhash_version, address_checksum_va
 
     var masterPrivateKey = xprivKey.privateKey.toString();
 
-    PublicAddress = createXRKAddressFromPrivateKey(masterPrivateKey, address_pubkeyhash_version, address_checksum_value);
+    PublicAddress = createAddressFromPrivateKey(masterPrivateKey, address_pubkeyhash_version, address_checksum_value);
     
-    PrivateKey = createXRKPrivateKeyFromPrivateKey(masterPrivateKey, private_key_version, address_checksum_value);
+    PrivateKey = createPrivateKeyFromPrivateKey(masterPrivateKey, private_key_version, address_checksum_value);
 
     var pub = listaddresses(multisigaddress);
 
@@ -498,6 +522,49 @@ function checkPassword(password, address_pubkeyhash_version, address_checksum_va
 
 
 }
+
+
+function restore(){
+
+     $('#restore').click(function(){
+            // check Password here 
+            restoreWallet(password, address_pubkeyhash_version, address_checksum_value, private_key_version);
+            
+     });
+}
+
+function restoreWallet(password, address_pubkeyhash_version, address_checksum_value, private_key_version) {
+
+    password = $('#pass1').val();
+
+    seed = $('#seed').val();
+
+    var code = new Mnemonic(seed);
+
+    var xprivKey = code.toHDPrivateKey(password); // using a passphrase
+
+    var masterPrivateKey = xprivKey.privateKey.toString();
+
+    PublicAddress = createAddressFromPrivateKey(masterPrivateKey, address_pubkeyhash_version, address_checksum_value);
+    
+    PrivateKey = createPrivateKeyFromPrivateKey(masterPrivateKey, private_key_version, address_checksum_value);
+
+    var address = returnaddress(PublicKeyString);
+    
+    var restoredWallet = {
+        "status": "success",
+        "address": address,
+        "privateKey": PrivateKey,
+        "publicKey": PublicKeyString
+    };
+
+    console.log(restoredWallet);
+
+    return restoredWallet;
+
+
+}
+
 
 
 function listaddresses(multisigaddress){
