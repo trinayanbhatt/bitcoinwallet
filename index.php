@@ -155,7 +155,7 @@
                         </div>
                     </div>
                 </div>
-                 <a download="RecordsKeeper-wallet-key.json" id="downloadlink">Download</a>
+                 <a download="wallet-key.json" id="downloadlink">Download</a>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default testnetColor" id="createKeyCloseBtn" data-dismiss="modal">Close</button>
                 </div>
