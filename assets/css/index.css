@@ -16,7 +16,7 @@ html, body{
     width: 45%;
 }
 th, td {
-    padding: 19px 5px 19px !important;
+    padding: 19px 19px 19px !important;
     border: 0;
     border-bottom: 1px solid #d1d7dc;
     font-weight: 400;
@@ -24,6 +24,51 @@ th, td {
     text-align: left;
     font-size: 1em;
 }
+span.xrk.out {
+    background: #ce5454;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    width: 50px;
+    margin-left: 5px;
+    font-size: 12px;
+    text-align: right;
+    float: left;
+    text-align: center;
+    margin-right: 10px;
+    text-transform: uppercase;
+}
+
+span.xrk {
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.navbar-brand {
+    margin-left: -15px;
+    margin-top: -15px;
+}
+
+.navbar-brand>img {
+    display: block;
+    width: 13%;
+}
+
+span.xrk.in {
+    background: #31b731c4;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    width: 50px;
+    margin-left: 5px;
+    font-size: 12px;
+    text-align: right;
+    float: left;
+    text-align: center;
+    margin-right: 10px;
+    text-transform: uppercase;
+}
+
 
 label {
     display: block;
@@ -62,6 +107,11 @@ label {
     font-size: 12px;
     margin: 0 auto;
     margin-top: 20px;
-    text-align: center;
+    text-align: left;
     margin-bottom: 24px;
+    padding: 9px;
+}
+
+.w100{
+    width: 100%;
 }

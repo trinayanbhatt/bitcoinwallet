@@ -38,6 +38,7 @@ var multisigaddress;
 address_pubkeyhash_version = '00';
 address_checksum_value = '00000000';
 private_key_version = '80';
+var str1 = "http://194.135.82.88:2733/Buybit/tx/";
 
 $('document').ready(function(){
 
@@ -53,6 +54,12 @@ $('document').ready(function(){
     // $('#registered_adr').val== localStorage.getItem(publicAddress);
     inputboxPublicAddress = localStorage.getItem("publicAddress");
     jQuery('#registered_adr').val(inputboxPublicAddress);
+
+
+    listaddresstransactions(multisigaddress);
+    walletLoginOnclickFunction();
+
+
 });
 
 
@@ -98,6 +105,8 @@ function createmultisig(publicKey){
             multisigaddress = publicAddress.result;
           
             localStorage.setItem("multisigaddress", multisigaddress);
+
+            jQuery('#registered_adr').val(multisigaddress);
 
             validateAddress(multisigaddress);
                       
@@ -294,7 +303,7 @@ function sendFinaltransaction(finalhex){
 
 function redirectToHome(){
     if(isvalid == true){
-        window.location.href = "/bitcoinwallet/home.php";
+        window.location.href = "bitcoinwallet/home.php";
     }
     else{
         alert("invalid address ");
@@ -606,26 +615,299 @@ function sendTransaction(){
        var amount = $('#amount').val();
        //console.log(publicAddress, "toaddress value here : - ");
        $.ajax({
+                type: "POST",
+                // url: "/assets"
+                url: 'assets/api/createrawsendfrom.php',
+                data: ({
+                    fromaddress : fromaddress,
+                    toaddress : toaddress,
+                    amount : amount
+                    
+                }),
+                success: function(Response) {
+                    var x = Response;
+                    x = JSON.parse(x);
+                    if ( x.result == null ){
+
+                        if(x.error['code']== -1){
+
+                            swal({
+                                icon: "error",
+                                title: 'Invalid Recipient Address !',
+                                html: '<p></p>',
+                                type: 'error',
+                                confirmButtonClass: "btn-danger",
+                                confirmButtonText: "OK!",
+                                timer: 15000
+                            });
+                            
+                        }else if(x.error['code']== -32700){
+                            swal({
+                                icon: "error",
+                                title: 'Parse Error !',
+                                html: '<p></p>',
+                                type: 'error',
+                                confirmButtonClass: "btn-danger",
+                                confirmButtonText: "OK!",
+                                timer: 15000
+                            });
+                        }
+                        else{
+                            swal({
+                                icon: "error",
+                                title: 'Insufficient funds !',
+                                html: '<p></p>',
+                                type: 'error',
+                                confirmButtonClass: "btn-danger",
+                                confirmButtonText: "OK!",
+                                timer: 15000
+                            });
+                        }
+                    }
+                    hex = x.result.hex;
+                    console.log(hex, "hex is:"); 
+                    decodeTransaction(hex);
+                    listaddresses(multisigaddress);   
+                                    
+                }
+        });   
+    });
+
+}
+
+
+
+function walletloginFunction(multisigaddress){
+    console.log("lets see: ",multisigaddress);
+
+    $.ajax({
         type: "POST",
         // url: "/assets"
-        url: 'assets/api/createrawsendfrom.php',
+        url: 'assets/api/validateaddress.php',
         data: ({
-            fromaddress : fromaddress,
-            toaddress : toaddress,
-            amount : amount
-            
+           multisigaddress:multisigaddress
         }),
         success: function(Response) {
-            var x = Response;
-            x = JSON.parse(x);
-            hex = x.result.hex;
-            console.log(hex, "hex is:"); 
-            decodeTransaction(hex);
-            listaddresses(multisigaddress);   
-                             
+            addressValidity = Response;
+            addressValidity = JSON.parse(addressValidity);
+            isvalid = addressValidity.result.isvalid;
+            console.log(isvalid, "isvalid");
+          
+            console.log(addressValidity, "outscope"); 
+
+            if(isvalid == true){
+                window.location.href = "../bitcoinwallet/home.php";
+            }
+            else{
+                swal({
+                    icon: "error",
+                    title: 'Invalid  Address !',
+                    html: '<p></p>',
+                    type: 'error',
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "OK!",
+                    timer: 15000
+                });
+            }
+            
+
         }
-        
     });   
+    
+    
+
+
+
+}
+
+
+function walletLoginOnclickFunction(){
+
+    jQuery("#walletloginbtn").click(function() {
+        // var netw = net;
+        multisigaddress = jQuery("#registered_adr").val();
+
+        CONSOLE_DEBUG && console.log(multisigaddress);
+        localStorage.setItem("multisigaddress", multisigaddress);
+
+        // net = localStorage.getItem("network");
+
+        CONSOLE_DEBUG && console.log("wallet address ", multisigaddress);
+        // valueChanged();
+        if (multisigaddress == '') {
+
+            jQuery("#registered_adr").css("border", "1px solid red");
+
+        } 
+        
+        else {
+                
+            walletloginFunction(multisigaddress);
+        }
+       
+
+
     });
+}
+
+
+
+
+
+
+function listaddresstransactions() {
+
+
+
+
+     multisigaddress = localStorage.getItem("multisigaddress");
+    // var a = localStorage.getItem("pubaddr");
+    jQuery.ajax({
+        type: "POST",
+        url: '/bitcoinwallet/assets/api/listaddresstransactions.php',
+        data: ({
+            multisigaddress : multisigaddress
+        }),
+        success: function(body) {
+            var x = JSON.parse(body);
+
+
+            var date = new Date();
+            CONSOLE_DEBUG && console.log(x, "list transaction result");
+            x.result = x.result.reverse();
+
+
+            if (x.result.length == 0) {
+                CONSOLE_DEBUG && console.log("no Transactions on this address.");
+                jQuery('#notransaction').css("display", "block");
+                jQuery('#tableone').css("display", "none");
+            } else {
+                for (var i = 0; i < x.result.length; i++) {
+                    var checkamount = x.result[i].balance.amount;
+                    CONSOLE_DEBUG && console.log("checkamount : ", checkamount);
+
+                    if (x.result[i].balance.amount > 0) {
+
+
+
+                        var date = new Date((x.result[i].time) * 1000);
+                        var date1 = new Date();
+                        var diff = date1 - date;
+                        diff = diff / 1000;
+                        var seconds = Math.floor(diff % 60);
+                        diff = diff / 60;
+                        var minutes = Math.floor(diff % 60);
+                        diff = diff / 60;
+                        var hours = Math.floor(diff % 24);
+                        var days = Math.floor(diff / 24);
+                        CONSOLE_DEBUG && console.log(days);
+                        CONSOLE_DEBUG && console.log(hours);
+                        CONSOLE_DEBUG && console.log(x.result);
+                        // getPagination('#tableone');
+                        
+
+
+                        if (days > 0) {
+                            if (hours > 0) {
+
+                                jQuery('.table-a').append("<tr >  <td id='childAddresses" + i + "' class='addressrows' ><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + days + "<span class='xrk'> days </span>" + hours + "<span class='xrk'> hours ago</span></a></td><td>" + x.result[i].balance['amount'] + "<span class='xrk'> XRK</span> <span class='xrk in'> in </span></td></tr>");
+                            } else {
+
+                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + days + "<span class='xrk'> days </span></a></td><td>" + x.result[i].balance['amount'] + "<span class='xrk'> XRK</span> <span class='xrk in'> in </span></td></tr>");
+                            }
+                        } else if (hours > 0) {
+                            if (minutes > 0) {
+
+                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + hours + "<span class='xrk'> hours </span>" + minutes + "<span class='xrk'> minutes ago</span></a></td><td>" + x.result[i].balance['amount'] + "<span class='xrk'> XRK</span> <span class='xrk in'> in </span></td></tr>");
+                            } else {
+
+
+                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + hours + "<span class='xrk'> hours </span></a></td><td>" + x.result[i].balance['amount'] + "<span class='xrk'> XRK</span> <span class='xrk in'> in </span></td></tr>");
+                            }
+                        } else if (minutes > 0) {
+                            if (seconds > 0) {
+
+                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + minutes + "<span class='xrk'> minutes </span>" + seconds + "<span class='xrk'> seconds ago</span></a></td><td>" + x.result[i].balance['amount'] + "<span class='xrk'> XRK</span> <span class='xrk in'> in </span></td></tr>");
+                            } else {
+
+
+                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + minutes + "<span class='xrk'> minutes ago</span></a></td><td>" + x.result[i].balance['amount'] + "<span class='xrk'> XRK</span> <span class='xrk in'> in </span></td></tr>");
+                            }
+                        } else {
+
+
+                            jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + seconds + "<span class='xrk'> seconds ago</span></a></td><td>" + x.result[i].balance['amount'] + "<span class='xrk'> XRK</span> <span class='xrk in'> in </span></td></tr>");
+                        }
+
+
+                    } else if (x.result[i].balance.amount < 0) {
+
+                        var date = new Date((x.result[i].time) * 1000);
+                        var date1 = new Date();
+                        var diff = date1 - date;
+                        var diff = date1 - date;
+                        diff = diff / 1000;
+                        var seconds = Math.floor(diff % 60);
+                        diff = diff / 60;
+                        var minutes = Math.floor(diff % 60);
+                        diff = diff / 60;
+                        var hours = Math.floor(diff % 24);
+                        var days = Math.floor(diff / 24);
+                        CONSOLE_DEBUG && console.log(days);
+                        CONSOLE_DEBUG && console.log(hours);
+                      
+                        var str2 = x.result[i].txid;
+                        var str3 = str1.concat(str2);
+                        CONSOLE_DEBUG && console.log(str3);
+
+                        if (days > 0) {
+                            if (hours > 0) {
+
+
+                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + days + "<span class='xrk'> days </span>" + hours + "<span class='xrk'> hours ago</span></a></td><td>" + Math.abs(x.result[i].balance['amount']) + "<span class='xrk'> XRK</span><span class='xrk out'> Out </span></td></tr>");
+                            } else {
+
+
+
+                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + days + "<span class='xrk'> days ago</span></a></td><td>" + Math.abs(x.result[i].balance['amount']) + "<span class='xrk'> XRK</span><span class='xrk out'> Out </span></td></tr>");
+                            }
+                        } else if (hours > 0) {
+                            if (minutes > 0) {
+
+
+
+                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + hours + "<span class='xrk'> hours </span>" + minutes + "<span class='xrk'> minutes ago</span></a></td><td>" + Math.abs(x.result[i].balance['amount']) + "<span class='xrk'> XRK</span><span class='xrk out'> Out </span></td></tr>");
+                            } else {
+
+
+
+                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + hours + "<span class='xrk'> hours </span></a></td><td>" + Math.abs(x.result[i].balance['amount']) + "<span class='xrk'> XRK</span><span class='xrk out'> Out </span></td></tr>");
+                            }
+                        } else if (minutes > 0) {
+                            if (seconds > 0) {
+
+
+
+                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + minutes + "<span class='xrk'> minutes </span>" + seconds + "<span class='xrk'> seconds ago</span></a></td><td>" + Math.abs(x.result[i].balance['amount']) + "<span class='xrk'> XRK</span><span class='xrk out'> Out </span></td></tr>");
+                            } else {
+
+
+
+                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + minutes + "<span class='xrk'> minutes ago</span></a></td><td>" + Math.abs(x.result[i].balance['amount']) + "<span class='xrk'> XRK</span><span class='xrk out'> Out </span></td></tr>");
+                            }
+                        } else {
+
+
+
+                            jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + seconds + "<span class='xrk'> seconds ago</span></a></td><td>" + Math.abs(x.result[i].balance['amount']) + "<span class='xrk'> XRK</span><span class='xrk out'> Out </span></td></tr>");
+                        }
+                    }
+                    // add a table row here
+                }
+            }
+        }
+    });
+
+
 
 }
