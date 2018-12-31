@@ -54,6 +54,9 @@
         </ul>
 
         <div class="tab-content">
+        <div class="notransaction">
+                                <p>No transactions on this address, yet.</p>
+        </div> 
             <div id="home" class="tab-pane fade in active">
                 <div class="table-wrapper">
                     <table class="table-a table-responsive" id="tableone" data-paging="true">
@@ -64,7 +67,8 @@
                                 
                                 
                                 <th>Transaction Amount</th>
-                            </tr>	
+                            </tr>
+                              	
                            
                     </tbody>
                     </table>

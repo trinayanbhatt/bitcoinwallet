@@ -148,18 +148,49 @@
                         </div>
                     </div>
                 </div>
+                <div id="printwalletcont">
+                        <div class="walletheader">
+                            <img src="images/logo.png">
+                        </div>
+                        <div class="row walletcontent">
+                            <div class="col-md-6">
+                                <div id="qrcode">
+                                    <p class="qrlabel">
 
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div id="qrcode2">
+                                    <p class="qrlabel">
+
+                                    </p>
+                                </div>
+
+                            </div>
+                             
+                        </div>
+                        <div class="row walletcontent">
+                            <p id="modalboxaddress" class="modc">
+
+                            </p>
+                            <p id="modalboxkey" class="modc">
+
+                            </p>
+                        </div>
+
+                    </div>
                 <div class="">
                     <div class="" id="modaladdrcont"></div>
                     <div>
                         <div class="col-md-12 printcontainer">
-
+                        <a download="wallet-key.json" id="downloadlink">Download</a>
                             <a id="printWallet" value="Print" class="noprint">Print Wallet</a>
-                
+
                         </div>
                     </div>
                 </div>
-                 <a download="wallet-key.json" id="downloadlink">Download</a>
+               
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default testnetColor" id="createKeyCloseBtn" data-dismiss="modal">Close</button>
                 </div>
@@ -256,6 +287,7 @@
       
       <script src ="assets/js/index.js"></script>
       <script src="assets/dist/sweetalert2.all.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
 
 

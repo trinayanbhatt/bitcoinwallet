@@ -59,7 +59,6 @@ $('document').ready(function(){
     listaddresstransactions(multisigaddress);
     walletLoginOnclickFunction();
 
-
 });
 
 
@@ -173,7 +172,8 @@ function importAddress(publicAddress){
 
 function validateAddress(multisigaddress){
 
-    console.log("lets see: ",publicAddress);
+    multisigaddress = publicAddress;
+    console.log("lets see1 : ",multisigaddress);
 
     $.ajax({
         type: "POST",
@@ -343,9 +343,30 @@ function redirectToHome(){
 function BitcoreAddressGenerator(){
 
      $('#createnew').click(function(){
-            generateBip39Wallet(password, wordListLang, entropyLength,
-            address_pubkeyhash_version, address_checksum_value,
-            private_key_version);
+
+            firstpass = $("#firstpass").val();
+            confpass = $("#confpass").val();
+
+            if ( firstpass == "" && confpass == ""){
+                $("#firstpass").css("border-color", "red");
+                $("#confpass").css("border-color", "red");
+            }
+            else  if ( firstpass != "" && confpass == ""){
+                $("#firstpass").css("border-color", "green");
+                $("#confpass").css("border-color", "red");
+            }
+            else  if ( firstpass == "" && confpass != "") {
+                $("#firstpass").css("border-color", "red");
+                $("#confpass").css("border-color", "green");
+            }
+            else if ( firstpass == confpass){
+                $("#firstpass").css("border-color", "green");
+                $("#confpass").css("border-color", "green");
+                generateBip39Wallet(password, wordListLang, entropyLength,
+                    address_pubkeyhash_version, address_checksum_value,
+                    private_key_version);
+            }
+           
             
      });
 }
@@ -376,7 +397,7 @@ function generateBip39Wallet(password, wordListLang, entropyLength,
         "seed": code.toString()
     };
 
-    CONSOLE_DEBUG && console.log("MultiWallet", multiWallet);
+    
 
     localStorage.setItem("pubaddr", multiWallet.address);
     localStorage.setItem("publicKeyString", multiWallet.pubcKeyString);
@@ -388,7 +409,16 @@ function generateBip39Wallet(password, wordListLang, entropyLength,
 
     createmultisig(PublicKeyString);
 
+    var multiWallet = {
+        "status": "success",
+        "address": PublicAddress,
+        "privateKey": PrivateKey,
+        "publicKey": PublicKeyString,
+        "seed": code.toString(),
+        "multisigaddress": multisigaddress
+    };
 
+    CONSOLE_DEBUG && console.log("MultiWallet", multiWallet);
     return multiWallet;
 
 
@@ -806,7 +836,7 @@ function listaddresstransactions() {
 
             if (x.result.length == 0) {
                 CONSOLE_DEBUG && console.log("no Transactions on this address.");
-                jQuery('#notransaction').css("display", "block");
+                jQuery('.notransaction').css("display", "block");
                 jQuery('#tableone').css("display", "none");
             } else {
                 for (var i = 0; i < x.result.length; i++) {
@@ -837,33 +867,33 @@ function listaddresstransactions() {
                         if (days > 0) {
                             if (hours > 0) {
 
-                                jQuery('.table-a').append("<tr >  <td id='childAddresses" + i + "' class='addressrows' ><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + days + "<span class='xrk'> days </span>" + hours + "<span class='xrk'> hours ago</span></a></td><td>" + x.result[i].balance['amount'] + "<span class='xrk'> XRK</span> <span class='xrk in'> in </span></td></tr>");
+                                jQuery('.table-a').append("<tr >  <td id='childAddresses" + i + "' class='addressrows' ><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + days + "<span class='xrk'> days </span>" + hours + "<span class='xrk'> hours ago</span></a></td><td>" + x.result[i].balance['amount'] + "<span class='xrk'> BBIT</span> <span class='xrk in'> in </span></td></tr>");
                             } else {
 
-                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + days + "<span class='xrk'> days </span></a></td><td>" + x.result[i].balance['amount'] + "<span class='xrk'> XRK</span> <span class='xrk in'> in </span></td></tr>");
+                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + days + "<span class='xrk'> days </span></a></td><td>" + x.result[i].balance['amount'] + "<span class='xrk'> BBIT</span> <span class='xrk in'> in </span></td></tr>");
                             }
                         } else if (hours > 0) {
                             if (minutes > 0) {
 
-                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + hours + "<span class='xrk'> hours </span>" + minutes + "<span class='xrk'> minutes ago</span></a></td><td>" + x.result[i].balance['amount'] + "<span class='xrk'> XRK</span> <span class='xrk in'> in </span></td></tr>");
+                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + hours + "<span class='xrk'> hours </span>" + minutes + "<span class='xrk'> minutes ago</span></a></td><td>" + x.result[i].balance['amount'] + "<span class='xrk'> BBIT</span> <span class='xrk in'> in </span></td></tr>");
                             } else {
 
 
-                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + hours + "<span class='xrk'> hours </span></a></td><td>" + x.result[i].balance['amount'] + "<span class='xrk'> XRK</span> <span class='xrk in'> in </span></td></tr>");
+                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + hours + "<span class='xrk'> hours </span></a></td><td>" + x.result[i].balance['amount'] + "<span class='xrk'> BBIT</span> <span class='xrk in'> in </span></td></tr>");
                             }
                         } else if (minutes > 0) {
                             if (seconds > 0) {
 
-                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + minutes + "<span class='xrk'> minutes </span>" + seconds + "<span class='xrk'> seconds ago</span></a></td><td>" + x.result[i].balance['amount'] + "<span class='xrk'> XRK</span> <span class='xrk in'> in </span></td></tr>");
+                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + minutes + "<span class='xrk'> minutes </span>" + seconds + "<span class='xrk'> seconds ago</span></a></td><td>" + x.result[i].balance['amount'] + "<span class='xrk'> BBIT</span> <span class='xrk in'> in </span></td></tr>");
                             } else {
 
 
-                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + minutes + "<span class='xrk'> minutes ago</span></a></td><td>" + x.result[i].balance['amount'] + "<span class='xrk'> XRK</span> <span class='xrk in'> in </span></td></tr>");
+                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + minutes + "<span class='xrk'> minutes ago</span></a></td><td>" + x.result[i].balance['amount'] + "<span class='xrk'> BBIT</span> <span class='xrk in'> in </span></td></tr>");
                             }
                         } else {
 
 
-                            jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + seconds + "<span class='xrk'> seconds ago</span></a></td><td>" + x.result[i].balance['amount'] + "<span class='xrk'> XRK</span> <span class='xrk in'> in </span></td></tr>");
+                            jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + seconds + "<span class='xrk'> seconds ago</span></a></td><td>" + x.result[i].balance['amount'] + "<span class='xrk'> BBIT</span> <span class='xrk in'> in </span></td></tr>");
                         }
 
 
@@ -891,42 +921,42 @@ function listaddresstransactions() {
                             if (hours > 0) {
 
 
-                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + days + "<span class='xrk'> days </span>" + hours + "<span class='xrk'> hours ago</span></a></td><td>" + Math.abs(x.result[i].balance['amount']) + "<span class='xrk'> XRK</span><span class='xrk out'> Out </span></td></tr>");
+                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + days + "<span class='xrk'> days </span>" + hours + "<span class='xrk'> hours ago</span></a></td><td>" + Math.abs(x.result[i].balance['amount']) + "<span class='xrk'> BBIT</span><span class='xrk out'> Out </span></td></tr>");
                             } else {
 
 
 
-                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + days + "<span class='xrk'> days ago</span></a></td><td>" + Math.abs(x.result[i].balance['amount']) + "<span class='xrk'> XRK</span><span class='xrk out'> Out </span></td></tr>");
+                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + days + "<span class='xrk'> days ago</span></a></td><td>" + Math.abs(x.result[i].balance['amount']) + "<span class='xrk'> BBIT</span><span class='xrk out'> Out </span></td></tr>");
                             }
                         } else if (hours > 0) {
                             if (minutes > 0) {
 
 
 
-                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + hours + "<span class='xrk'> hours </span>" + minutes + "<span class='xrk'> minutes ago</span></a></td><td>" + Math.abs(x.result[i].balance['amount']) + "<span class='xrk'> XRK</span><span class='xrk out'> Out </span></td></tr>");
+                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + hours + "<span class='xrk'> hours </span>" + minutes + "<span class='xrk'> minutes ago</span></a></td><td>" + Math.abs(x.result[i].balance['amount']) + "<span class='xrk'> BBIT</span><span class='xrk out'> Out </span></td></tr>");
                             } else {
 
 
 
-                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + hours + "<span class='xrk'> hours </span></a></td><td>" + Math.abs(x.result[i].balance['amount']) + "<span class='xrk'> XRK</span><span class='xrk out'> Out </span></td></tr>");
+                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + hours + "<span class='xrk'> hours </span></a></td><td>" + Math.abs(x.result[i].balance['amount']) + "<span class='xrk'> BBIT</span><span class='xrk out'> Out </span></td></tr>");
                             }
                         } else if (minutes > 0) {
                             if (seconds > 0) {
 
 
 
-                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + minutes + "<span class='xrk'> minutes </span>" + seconds + "<span class='xrk'> seconds ago</span></a></td><td>" + Math.abs(x.result[i].balance['amount']) + "<span class='xrk'> XRK</span><span class='xrk out'> Out </span></td></tr>");
+                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + minutes + "<span class='xrk'> minutes </span>" + seconds + "<span class='xrk'> seconds ago</span></a></td><td>" + Math.abs(x.result[i].balance['amount']) + "<span class='xrk'> BBIT</span><span class='xrk out'> Out </span></td></tr>");
                             } else {
 
 
 
-                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + minutes + "<span class='xrk'> minutes ago</span></a></td><td>" + Math.abs(x.result[i].balance['amount']) + "<span class='xrk'> XRK</span><span class='xrk out'> Out </span></td></tr>");
+                                jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + minutes + "<span class='xrk'> minutes ago</span></a></td><td>" + Math.abs(x.result[i].balance['amount']) + "<span class='xrk'> BBIT</span><span class='xrk out'> Out </span></td></tr>");
                             }
                         } else {
 
 
 
-                            jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + seconds + "<span class='xrk'> seconds ago</span></a></td><td>" + Math.abs(x.result[i].balance['amount']) + "<span class='xrk'> XRK</span><span class='xrk out'> Out </span></td></tr>");
+                            jQuery('.table-a').append("<tr>  <td id='childAddresses" + i + "' class='addressrows'><a href=" + str3 + " target='_blank'>" + x.result[i].txid + "</a></td><td><a  data-toggle='tooltip' title='" + date + "'>" + seconds + "<span class='xrk'> seconds ago</span></a></td><td>" + Math.abs(x.result[i].balance['amount']) + "<span class='xrk'> BBIT</span><span class='xrk out'> Out </span></td></tr>");
                         }
                     }
                     // add a table row here

@@ -44,6 +44,32 @@ span.xrk {
     font-size: 13px;
 }
 
+p#seed {
+    font-size: 16px;
+    padding: 15px;
+    background: #7c4600;
+    border-radius: 4px;
+    font-weight: 600;
+    color: white;
+    
+}
+.notransaction{
+    display: none;
+    padding: 20px;
+    color: #ea3434;
+    font-weight: 500;
+}
+.col-md-12.printcontainer{
+    padding: 20px;
+}
+a#printWallet {
+    float: right;
+}
+#seedcontainer{
+    padding: 20px;
+    display: none;
+}
+
 .navbar-brand {
     margin-left: -15px;
     margin-top: -15px;
