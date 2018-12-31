@@ -109,6 +109,12 @@
                                 <input type="text" id="passphrase" name="passphrase" placeholder="Passphrase" onchange="" required>
                                 <!-- <span class="suffix">BBIT</span> -->
                             </p>
+
+                            <p>
+                                <label >Enter Seed</label>
+                                <input type="text" id="seeder" name="seed" placeholder="Seed" onchange="" required>
+                                <!-- <span class="suffix">BBIT</span> -->
+                            </p>
                         </div>
                         
                         <button id="send" class="testnetColor">SEND TRANSACTION
@@ -165,19 +171,19 @@
                     <div class="col-md-4 code1">
                         
                         <div id="qrcode">
-                            <p class="qrlabel">xrk-wallet-address</p>
+                            <p class="qrlabel">wallet-address</p>
                         </div>
                     </div>
                     <div class="col-md-4 code2">
                         
                         <div id="qrcode6">
-                            <p class="qrlabel">xrk-wallet-public-key</p>
+                            <p class="qrlabel">wallet-public-key</p>
                         </div>
                     </div>
                     <div class="col-md-4 code6">
 
                         <div id="qrcode2">
-                            <p class="qrlabel">xrk-wallet-private-key</p>
+                            <p class="qrlabel">wallet-private-key</p>
                         </div>
                     </div>
                 </div>

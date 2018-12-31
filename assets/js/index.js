@@ -44,7 +44,6 @@ $('document').ready(function(){
 
     //addressGenrationScript();
     BitcoreAddressGenerator();
-    sendTransaction();
     checkValidity();
     restore();
 
@@ -291,8 +290,9 @@ function sendFinaltransaction(finalhex){
             var signedtxresult = JSON.parse(signedtx);
             var txid = signedtxresult;
             console.log(txid, "final txid is:");
+            var txUrl = str1;
             
-            var y = x.error;
+            var y = signedtxresult.error;
             if (y != null) {
                 swal({
                     title: 'Invalid Transaction! ',
@@ -302,16 +302,16 @@ function sendFinaltransaction(finalhex){
                     timer: 15000
                 });
             } else {
-                CONSOLE_DEBUG && console.log('result in json format :', x);
-                CONSOLE_DEBUG && console.log("transaction id result : ", x.result);
+                CONSOLE_DEBUG && console.log('result in json format :', signedtxresult);
+                CONSOLE_DEBUG && console.log("transaction id result : ", signedtxresult.result);
                 //        jQuery('#txid').text(x.result);
-                CONSOLE_DEBUG && console.log("txurl", txUrl + x.result);
-                var aurl = txUrl + x.result;
+                CONSOLE_DEBUG && console.log("txurl", txUrl + signedtxresult.result);
+                var aurl = txUrl + signedtxresult.result;
 
                 swal({
                     title: 'Your transction has been processed.',
 
-                    html: '<a href="' + aurl + '" target="_blank"> <b>Check Transaction status here:</b><br> ' + x.result + '</a>',
+                    html: '<a href="' + aurl + '" target="_blank"> <b>Check Transaction status here:</b><br> ' + signedtxresult.result + '</a>',
                     type: 'success',
                     showConfirmButton: true,
                     confirmButtonClass: "btn-success",
@@ -549,7 +549,7 @@ function xorBuffer(bufA, bufB) {
 
 function checkValidity(){
 
-     $('#check').click(function(){
+     $('#send').click(function(){
             // check Password here 
             checkPassword(password, address_pubkeyhash_version, address_checksum_value, private_key_version);
             
@@ -558,9 +558,9 @@ function checkValidity(){
 
 function checkPassword(password, address_pubkeyhash_version, address_checksum_value, private_key_version) {
 
-    password = $('#pass1').val();
+    password = $('#passphrase').val();
 
-    seed = localStorage.getItem("seed");
+    seed = $('#seeder').val();
 
     var code = new Mnemonic(seed);
 
@@ -572,15 +572,23 @@ function checkPassword(password, address_pubkeyhash_version, address_checksum_va
     
     PrivateKey = createPrivateKeyFromPrivateKey(masterPrivateKey, private_key_version, address_checksum_value);
 
-    var pub = listaddresses(multisigaddress);
+    var publicaddr = listaddresses(multisigaddress);
 
-    if (pub == PublicAddress){
+    if (publicaddr == PublicAddress){
         
-        alert("success");
+        sendTransaction();
     }
     else{
 
-          alert("fail");
+          swal({
+                                icon: "error",
+                                title: 'Invalid Password !',
+                                html: '<p></p>',
+                                type: 'error',
+                                confirmButtonClass: "btn-danger",
+                                confirmButtonText: "OK!",
+                                timer: 15000
+                            });
 
     }
 
@@ -666,7 +674,7 @@ function sendTransaction(){
     
     var fromaddress = localStorage.getItem('multisigaddress');
 
-    $('#send').click(function(){
+    
 
        var toaddress = $('#toaddress').val();
        var amount = $('#amount').val();
@@ -728,7 +736,6 @@ function sendTransaction(){
                                     
                 }
         });   
-    });
 
 }
 
@@ -816,12 +823,11 @@ function listaddresstransactions() {
 
 
 
-
-     multisigaddress = localStorage.getItem("multisigaddress");
+    multisigaddress = localStorage.getItem("multisigaddress");
     // var a = localStorage.getItem("pubaddr");
     jQuery.ajax({
         type: "POST",
-        url: '/bitcoinwallet/assets/api/listaddresstransactions.php',
+        url: 'assets/api/listaddresstransactions.php',
         data: ({
             multisigaddress : multisigaddress
         }),

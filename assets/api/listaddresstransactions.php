@@ -2,7 +2,6 @@
 
 $curl = curl_init();
 $config = include('config.php');
-$txid = $_POST['txid'];
 $chain = $config['chain'];
 $publicAddress = $_POST['multisigaddress'];
 
