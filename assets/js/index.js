@@ -292,7 +292,34 @@ function sendFinaltransaction(finalhex){
             var txid = signedtxresult;
             console.log(txid, "final txid is:");
             
-            alert("Transaction is successful");        
+            var y = x.error;
+            if (y != null) {
+                swal({
+                    title: 'Invalid Transaction! ',
+                    type: 'error',
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "OK!",
+                    timer: 15000
+                });
+            } else {
+                CONSOLE_DEBUG && console.log('result in json format :', x);
+                CONSOLE_DEBUG && console.log("transaction id result : ", x.result);
+                //        jQuery('#txid').text(x.result);
+                CONSOLE_DEBUG && console.log("txurl", txUrl + x.result);
+                var aurl = txUrl + x.result;
+
+                swal({
+                    title: 'Your transction has been processed.',
+
+                    html: '<a href="' + aurl + '" target="_blank"> <b>Check Transaction status here:</b><br> ' + x.result + '</a>',
+                    type: 'success',
+                    showConfirmButton: true,
+                    confirmButtonClass: "btn-success",
+                    confirmButtonText: "OK!",
+
+                    timer: 15000
+                });
+            }
                       
         }
     });   

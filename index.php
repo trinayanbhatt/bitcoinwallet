@@ -101,25 +101,50 @@
                 </div>
                     <div class="seedcont"> <img id="printimg2" src="">  </div>
                     <div id="seedcontainer">
-                    </div>
+                        <div class="createappend">
+                            <p class="themecolor font14 regular">
+                                <span class="green">Your BBIT wallet has been created successfully.
+
+                                </span>
+                                <br><br>Please securely store your wallet file (wallet.json) to access your wallet at later stage. You only need public address to view BBIT balance or transactions. Private key should never be shared or disclosed to anyone and is only required to publish records/transactions or while sending BBIT tokens to others.
+                            </p>
+                            <p class="seedlabel regular font14"> Alternatively,  you can write down seed phrase (24 words) in same order as displayed below to restore your wallet completely. If you have entered a password while creating this wallet, please make sure you enter it as well while restoring the wallet. This is recommended way to backup your wallet. <i class="fas fa-print" id="seedprint"></i>)
+                            </p>
+                            <div class="seedcont"> 
+                                <img id="printimg2" src="">  
+                            </div>
+                            <p id="seed"> aspect viable return retreat asset net quote decide young tip slab edge spend sketch say bench fury oblige guard volume fog mouse half frequent
+
+                            </p>
+                            <p id="modalshowaddress">mwpS6QWJL2AsNFbpuyFwX6QQGwteQGVto1
+
+                            </p>
+                            <p id="modalshowkey">cRWpsrbNERfXofPor6rrgKNxoLuArQecbueHbVkHVvxfJvFu7bah
+                                
+                            </p>
+                        </div>
+                        <div class="col-md-12"></div>
+                    </div><!--seedcontainer ends here -->
+                    
+
                 <div class="row walletcontent" id="qrcodecontainer" style="display: none;">
                     <img src="" id="printimg">
                     <div class="col-md-4 code1">
                         
                         <div id="qrcode">
-                            <p class="qrlabel">xrk-wallet-address</p>
+                            <p class="qrlabel">BBIT-wallet-address</p>
                         </div>
                     </div>
                     <div class="col-md-4 code2">
                         
                         <div id="qrcode6">
-                            <p class="qrlabel">xrk-wallet-public-key</p>
+                            <p class="qrlabel">BBIT-wallet-public-key</p>
                         </div>
                     </div>
                     <div class="col-md-4 code6">
 
                         <div id="qrcode2">
-                            <p class="qrlabel">xrk-wallet-private-key</p>
+                            <p class="qrlabel">BBIT-wallet-private-key</p>
                         </div>
                     </div>
                 </div>
@@ -179,13 +204,13 @@
                     <div class="col-md-4 code1">
                         
                         <div id="qrcode">
-                            <p class="qrlabel">xrk-wallet-address</p>
+                            <p class="qrlabel">BBIT-wallet-address</p>
                         </div>
                     </div>
                     <div class="col-md-4 code2">
                         
                         <div id="qrcode6">
-                            <p class="qrlabel">xrk-wallet-public-key</p>
+                            <p class="qrlabel">BBIT-wallet-public-key</p>
                         </div>
                     </div>
                     <div class="col-md-4 code6">
