@@ -35,6 +35,7 @@ var scriptHash;
 var finaltxid;
 var privateKey;
 var multisigaddress;
+var finalhex;
 address_pubkeyhash_version = '00';
 address_checksum_value = '00000000';
 private_key_version = '80';
@@ -91,9 +92,13 @@ $('document').ready(function(){
 
 
 function createmultisig(publicKey){
+
+    var address;
+
     $.ajax({
         type: "POST",
         url: 'assets/api/createmultisig.php',
+        async: false,
         data: ({
            publicKey:publicKey
         }),
@@ -104,13 +109,15 @@ function createmultisig(publicKey){
           
             localStorage.setItem("multisigaddress", multisigaddress);
 
-            jQuery('#registered_adr').val(multisigaddress);
+            address = multisigaddress;
+
+            //jQuery('#registered_adr').val(multisigaddress);
 
             validateAddress(multisigaddress);
                       
         }
     });   
-    
+    return address;
 }
 
 function returnaddress(publicKey){
@@ -231,7 +238,7 @@ function getScripthash(txid){
             x = JSON.parse(x);
             scriptHash = x.result.vout[decodedvout].scriptPubKey.hex;
             console.log(scriptHash, "script hash is:");      
-            signTransaction(hex, txid, decodedvout, scriptHash, redeemScript, privateKey);     
+            signprivTransaction(hex, txid, decodedvout, scriptHash, redeemScript, privateKey);     
         }
         
     });
@@ -239,20 +246,40 @@ function getScripthash(txid){
 }
 
 
-function signTransaction(hex, txid, decodedvout, scriptHash, redeemScript, privateKey){
-    
-    var privateKey = $('#privkey').val();
-    console.log(hex);
-    console.log(txid);
-    console.log(decodedvout);
-    console.log(scriptHash);
-    console.log(redeemScript);
-    console.log(privateKey);
+function signprivTransaction(hex, txid, decodedvout, scriptHash, redeemScript, privateKey){
     
     $.ajax({
         type: "POST",
         // url: "/assets"
         url: 'assets/api/signtransaction.php',
+        data: ({
+           hex: hex,
+           txid: txid,
+           decodedvout: decodedvout,
+           scriptHash: scriptHash,
+           redeemScript : redeemScript
+        }),
+        success: function(Response) {
+
+            signedresult = Response;
+            signedresult = JSON.parse(signedresult);
+            finalhex = signedresult.result.hex;
+          
+            signTransaction(finalhex, txid, decodedvout, scriptHash, redeemScript, privateKey);            
+                      
+        }
+    });   
+    
+}
+
+function signTransaction(hex, txid, decodedvout, scriptHash, redeemScript, privateKey){
+    
+    var privateKey = $('#privkey').val();
+    
+    $.ajax({
+        type: "POST",
+        // url: "/assets"
+        url: 'assets/api/resigntransaction.php',
         data: ({
            hex: hex,
            txid: txid,
@@ -266,7 +293,7 @@ function signTransaction(hex, txid, decodedvout, scriptHash, redeemScript, priva
             signedresult = Response;
             signedresult = JSON.parse(signedresult);
             finalhex = signedresult.result.hex;
-            console.log(finalhex, "final hex is:");
+            console.log(signedresult, "final hex is:");
           
             sendFinaltransaction(finalhex);            
                       
@@ -397,13 +424,6 @@ function generateBip39Wallet(password, wordListLang, entropyLength,
         "seed": code.toString()
     };
 
-    
-
-    localStorage.setItem("pubaddr", multiWallet.address);
-    localStorage.setItem("publicKeyString", multiWallet.pubcKeyString);
-    localStorage.setItem("seed", multiWallet.seed);
-    
-    publicKey = multiWallet.publicKey;
 
     importAddress(PublicAddress);
 
@@ -595,6 +615,7 @@ function checkPassword(password, address_pubkeyhash_version, address_checksum_va
     return true;
 
 
+
 }
 
 
@@ -673,9 +694,6 @@ function listaddresses(multisigaddress){
 function sendTransaction(){
     
     var fromaddress = localStorage.getItem('multisigaddress');
-
-    
-
        var toaddress = $('#toaddress').val();
        var amount = $('#amount').val();
        //console.log(publicAddress, "toaddress value here : - ");

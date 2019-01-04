@@ -9,7 +9,7 @@ $hex = $_POST['hex'];
 $scriptHash = $_POST['scriptHash'];
 $redeemScript = $_POST['redeemScript'];
 $decodedvout = $_POST['decodedvout'];
-$privateKey = $config['privkey'];
+$privateKey = $_POST['privateKey'];
 $chain = $config['chain'];
 
 curl_setopt_array($curl, array(
