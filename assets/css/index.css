@@ -15,6 +15,12 @@ html, body{
 .sendform {
     width: 45%;
 }
+#qrcodecontainer{
+    padding: 20px;
+}
+#printwalletcont{
+    display: none
+}
 th, td {
     padding: 19px 19px 19px !important;
     border: 0;
@@ -140,4 +146,8 @@ label {
 
 .w100{
     width: 100%;
+}
+.errorMessage{
+    display: none;
+    color:rgb(192, 57, 57);
 }

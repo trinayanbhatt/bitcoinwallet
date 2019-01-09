@@ -63,9 +63,7 @@
                     <tbody>
                             <tr>
                                 <th>Transaction ID</th>
-                                <th>Time</th>
-                                
-                                
+                                <th>Time</th>     
                                 <th>Transaction Amount</th>
                             </tr>
                               	
@@ -78,7 +76,8 @@
                 
             </div>
             <div id="menu2" class="tab-pane fade">
-            <div name="pfform" method="post" class="sendform" id="pfform">
+            
+            <div class="sendform" name="pfform" method="post"  id="pfform" >
                     
                     <div class="tabs-inner">
                         <p class="showaddr fnone senderaddr">
@@ -90,34 +89,39 @@
                                 <label for="sendRecipientaddress">Enter Recipient Address </label>
                                 <input type="text" id="toaddress" name="sendRecipientaddress" placeholder="Recipient Address" onchange="" required>
                                 <span class="suffix"><i class="icon-qr"></i></span>
+                                <div class='errorMessage error0'>Enter the Recipient Address</div>
                             </p>
 
                             <p>
                                 <label for="faa">Enter BBIT Amount</label>
                                 <input type="number" id="amount" name="sendBTC" placeholder="BBIT Amount" onchange="" required>
                                 <!-- <span class="suffix">BBIT</span> -->
+                                <div class='errorMessage error1'>Enter the Recipient Address</div>
                             </p>
 
                             <p>
                                 <label >Enter Private key</label>
                                 <input type="text" id="privkey" name="sendBTC" placeholder="Private key" onchange="" required>
                                 <!-- <span class="suffix">BBIT</span> -->
+                                <div class='errorMessage error2'>Enter the Recipient Address</div>
                             </p>
 
                             <p>
                                 <label >Enter Passphrase</label>
                                 <input type="text" id="passphrase" name="passphrase" placeholder="Passphrase" onchange="" required>
                                 <!-- <span class="suffix">BBIT</span> -->
+                                <div class='errorMessage error3'>Enter the Recipient Address</div>
                             </p>
 
                             <p>
                                 <label >Enter Seed</label>
                                 <input type="text" id="seeder" name="seed" placeholder="Seed" onchange="" required>
                                 <!-- <span class="suffix">BBIT</span> -->
+                                <div class='errorMessage error4'>Enter the Recipient Address</div>
                             </p>
                         </div>
                         
-                        <button id="send" class="testnetColor">SEND TRANSACTION
+                        <button id="send" class="testnetColor buttons">SEND TRANSACTION
                         </button>
                         
                         <!-- <button id="send" class="testnetColor buttons" >SEND TRANSACTION
@@ -128,7 +132,9 @@
 
                     </div>
                 </div> 
-    </div> <!-- menu2 ends here -->
+            </div>
+            
+    <!-- menu2 ends here -->
             <div id="menu3" class="tab-pane fade">
             <h3>Menu 3</h3>
             <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>

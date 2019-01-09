@@ -8,6 +8,7 @@
 // List of global variables declared and Console toggle can be achieved by changing the value of CONSOLE_DEBUG to either true or false //
 
 
+
 var CONSOLE_DEBUG = true;
 var privkey1;
 var pubaddr;
@@ -439,6 +440,95 @@ function generateBip39Wallet(password, wordListLang, entropyLength,
     };
 
     CONSOLE_DEBUG && console.log("MultiWallet", multiWallet);
+    $("#firststand").hide();
+    $("#seedcontainer").show();
+    $("#qrcodecontainer").show();
+    var qrcode = new QRCode(document.getElementById("qrcode"), {
+        width: 150,
+        height: 150
+    });
+    var qrcode2 = new QRCode(document.getElementById("qrcode2"), {
+        width: 150,
+        height: 150
+    });
+    var qrcode3 = new QRCode(document.getElementById("qrcode3"), {
+        width: 150,
+        height: 150
+    });
+
+
+    function makeCode() { // qr code generater function for address
+
+        var elText = multisigaddress;
+        var elprive = PrivateKey; //pass  value of address stored in elpriv
+
+
+        qrcode.makeCode(elText);
+
+    }
+
+    makeCode(); // call the function here 
+
+    function makeCode2() { // qr code generater function for address
+
+        var elText = PublicKeyString;
+        var elprive = PrivateKey; //pass  value of address stored in elpriv
+
+
+        qrcode2.makeCode(elText);
+
+    }
+    makeCode2();
+
+    function makeCode3() { // qr code generater function for address
+
+        var elText = PrivateKey;
+        var elprive = PrivateKey; //pass  value of address stored in elpriv
+
+
+        qrcode3.makeCode(elText);
+
+    }
+    makeCode3();
+    $("#registered_adr").val(multisigaddress);
+    seed = code.toString();
+    var dataStr = "data:text/json;charset=utf-8," + ('{' + '"BBIT-wallet-address"' + ":" + '"' + multisigaddress + '"' + "," + '"BBIT-wallet-private-key"' + ":" + '"' + PrivateKey + '"' + "," + '"BBIT-wallet-public-key"' + ":" + '"' + PublicKeyString + '"' + "," + '"BBIT-wallet-recovery-seed"' + ":" + '"' + seed + '"' + '}');
+
+        var dlAnchorElem = document.getElementById('downloadlink');
+
+        dlAnchorElem.setAttribute("href", dataStr);
+
+       
+        dlAnchorElem.setAttribute("download", "BBIT-wallet-"+ multisigaddress +".json");
+        dlAnchorElem.click();
+       
+        (function() {
+            var textFile = null,
+                makeTextFile = function(text) {
+                    var data = new Blob([text], {
+                        type: 'text/plain'
+                    });
+
+                    // If we are replacing a previously generated file we need to
+                    // manually revoke the object URL to avoid memory leaks.
+                    if (textFile !== null) {
+                        window.URL.revokeObjectURL(textFile);
+                    }
+
+                    textFile = window.URL.createObjectURL(data);
+
+                    return textFile;
+                };
+
+            var create = document.getElementById('create'),
+                textbox = document.getElementById(privkey1);
+            var link = document.getElementById('downloadlink');
+
+            link.href = makeTextFile('{' + '"BBIT-address"' + ":" + '"' + multisigaddress + '"' + "," + '"BBIT-private-key"' + ":" + '"' + PrivateKey + '"' + "," + '"BBIT-PublicKey"' + ":" + '"' + PublicKeyString + '"}');
+            
+            link.style.display = 'block';
+        })();
+
     return multiWallet;
 
 
@@ -569,12 +659,50 @@ function xorBuffer(bufA, bufB) {
 
 function checkValidity(){
 
-     $('#send').click(function(){
+     $('#send').click(function(e){
+         console.log('working');
+         debugger;
+         e.preventDefault();
             // check Password here 
+        if(validateForm()){
+            // alert('call function here');
             checkPassword(password, address_pubkeyhash_version, address_checksum_value, private_key_version);
+        }
             
      });
 }
+
+
+function validateForm(){
+    var flag = 0;
+    var address = $('#toaddress').val();
+    var amount = $('#amount').val();
+    var privkey = $('#privkey').val();
+    var passphrase = $('#passphrase').val();
+    var seeder = $('#seeder').val();
+    $('.errorMessage').hide();
+
+    var inputVal = new Array(address, amount, privkey, passphrase, seeder);
+        if(inputVal[0] == ""){
+            $('.error0').show().html('enter the address');
+        } 
+         if(inputVal[1] == ""){
+            $('.error1').show().html('enter the amount');
+        }
+        if(inputVal[2] == ""){
+            $('.error2').show().html('enter the privkey');
+        } 
+        if(inputVal[3] == ""){
+            $('.error3').show().html('enter the passphrase');
+        }
+        if(inputVal[4] == ""){
+            $('.error4').show().html('enter the seeder');
+        }
+        if(inputVal[0] != "" && inputVal[1] != "" && inputVal[2] != "" && inputVal[3] != "" && inputVal[4] != "" ){
+            flag=1;
+        }
+    return flag;
+}   
 
 function checkPassword(password, address_pubkeyhash_version, address_checksum_value, private_key_version) {
 

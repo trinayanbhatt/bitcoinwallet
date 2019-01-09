@@ -20,7 +20,7 @@
     
 </head>
 <body>
-
+<!-- header starts here  -->
 <header>
     <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -116,12 +116,7 @@
                             <p id="seed"> aspect viable return retreat asset net quote decide young tip slab edge spend sketch say bench fury oblige guard volume fog mouse half frequent
 
                             </p>
-                            <p id="modalshowaddress">mwpS6QWJL2AsNFbpuyFwX6QQGwteQGVto1
-
-                            </p>
-                            <p id="modalshowkey">cRWpsrbNERfXofPor6rrgKNxoLuArQecbueHbVkHVvxfJvFu7bah
-                                
-                            </p>
+                           
                         </div>
                         <div class="col-md-12"></div>
                     </div><!--seedcontainer ends here -->
@@ -129,21 +124,21 @@
 
                 <div class="row walletcontent" id="qrcodecontainer" style="display: none;">
                     <img src="" id="printimg">
-                    <div class="col-md-4 code1">
+                    <div class="col-md-4 ">
                         
                         <div id="qrcode">
                             <p class="qrlabel">BBIT-wallet-address</p>
                         </div>
                     </div>
-                    <div class="col-md-4 code2">
+                    <div class="col-md-4 ">
                         
-                        <div id="qrcode6">
+                        <div id="qrcode2">
                             <p class="qrlabel">BBIT-wallet-public-key</p>
                         </div>
                     </div>
-                    <div class="col-md-4 code6">
+                    <div class="col-md-4">
 
-                        <div id="qrcode2">
+                        <div id="qrcode3">
                             <p class="qrlabel">BBIT-wallet-private-key</p>
                         </div>
                     </div>
@@ -170,14 +165,14 @@
                             </div>
                              
                         </div>
-                        <div class="row walletcontent">
+                        <!-- <div class="row walletcontent">
                             <p id="modalboxaddress" class="modc">
 
                             </p>
                             <p id="modalboxkey" class="modc">
 
                             </p>
-                        </div>
+                        </div> -->
 
                     </div>
                 <div class="">
@@ -185,7 +180,7 @@
                     <div>
                         <div class="col-md-12 printcontainer">
                         <a download="wallet-key.json" id="downloadlink">Download</a>
-                            <a id="printWallet" value="Print" class="noprint">Print Wallet</a>
+                            <!-- <a id="printWallet" value="Print" class="noprint">Print Wallet</a> -->
 
                         </div>
                     </div>
@@ -199,7 +194,7 @@
     </div>
 </section>
 
-<section>
+<section >
     <div id="restoremodal" class="modal fade in" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -281,13 +276,13 @@
       <script
         src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"
         ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
 
       <script src="assets/js/bitcore-lib/bitcore-lib.js"></script>
       <script src="assets/js/bitcore-mnemonic/bitcore-mnemonic.js"></script>
-      
+      <script src="assets/js/qrcode.min.js"></script>
       <script src ="assets/js/index.js"></script>
       <script src="assets/dist/sweetalert2.all.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
 
 
